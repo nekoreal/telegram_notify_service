@@ -1,3 +1,5 @@
+import time
+
 from pika import ConnectionParameters, BlockingConnection, callback
 from config import CONNECTION_PARAMS
 import json
@@ -32,9 +34,14 @@ def tg_notify_callback(ch, method, properties, body):
     time_log=True,
 )
 def start_consumer():
-    with BlockingConnection(CONNECTION_PARAMS) as connection:
-        with connection.channel() as channel:
-            channel.queue_declare(queue='tg_notify')
-            channel.basic_consume(queue='tg_notify',
-                                  on_message_callback=tg_notify_callback)
-            channel.start_consuming()
+    time_sleep=60
+    while True:
+        send_notify("Starting consumer")
+        with BlockingConnection(CONNECTION_PARAMS) as connection:
+            with connection.channel() as channel:
+                channel.queue_declare(queue='tg_notify')
+                channel.basic_consume(queue='tg_notify',
+                                      on_message_callback=tg_notify_callback)
+                channel.start_consuming()
+        time.sleep(time_sleep)
+        time_sleep=time_sleep*2
