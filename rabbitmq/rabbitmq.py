@@ -1,6 +1,6 @@
 import time
 
-from pika import ConnectionParameters, BlockingConnection, callback
+from pika import ConnectionParameters, BlockingConnection, callback, exceptions
 from config import CONNECTION_PARAMS
 import json
 from tg_bot.senders import send_notify
@@ -34,14 +34,33 @@ def tg_notify_callback(ch, method, properties, body):
     time_log=True,
 )
 def start_consumer():
-    time_sleep=60
+    ts=5
     while True:
         send_notify("Starting consumer")
-        with BlockingConnection(CONNECTION_PARAMS) as connection:
-            with connection.channel() as channel:
-                channel.queue_declare(queue='tg_notify')
-                channel.basic_consume(queue='tg_notify',
-                                      on_message_callback=tg_notify_callback)
-                channel.start_consuming()
-        time.sleep(time_sleep)
-        time_sleep=time_sleep*2
+        try:
+            with BlockingConnection(CONNECTION_PARAMS) as connection:
+                with connection.channel() as channel:
+                    channel.queue_declare(queue='tg_notify')
+                    channel.basic_consume(queue='tg_notify',
+                                          on_message_callback=tg_notify_callback)
+                    channel.start_consuming()
+
+        except  exceptions.ConnectionClosedByBroker:
+            send_notify("Соединение закрыто брокером. Переподключение...")
+            time.sleep(5)
+            continue
+        except exceptions.AMQPConnectionError as e:
+            send_notify(f"Ошибка соединения: {e}. Переподключение через 5 секунд...")
+            time.sleep(ts)
+            ts = ts * 2
+            continue
+        except Exception as e:
+            send_notify(f"Неизвестная ошибка: {e}. Перезапуск...")
+            time.sleep(ts)
+            ts = ts * 2
+            continue
+        finally:
+            try:
+                connection.close()
+            except:
+                pass
