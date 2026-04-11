@@ -51,8 +51,7 @@ def start_consumer():
             continue
         except exceptions.AMQPConnectionError as e:
             send_notify(f"Ошибка соединения: {e}. Переподключение через 5 секунд...")
-            time.sleep(ts)
-            ts = ts * 2
+            time.sleep(5)
             continue
         except Exception as e:
             send_notify(f"Неизвестная ошибка: {e}. Перезапуск...")
