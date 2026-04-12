@@ -25,6 +25,15 @@ def logger(
                     f"\nargs:{args} kwargs:{kwargs}"
                     f"{f'\n\nexc{exc}\n' if exc else ''}"
                 )
+                data_log = {
+                    "time": datetime.now(),
+                    "func": func.__name__,
+                    "args": args,
+                    "kwargs": kwargs,
+                    "exc": exc,
+                }
+                from tg_bot.senders import send_notify
+                send_notify(text=data_log, thread="error" , parse_like_json=True)
                 if print_log:
                     print(log)
                 # Можно сделать асинхронную запись, но для простоты — обычная запись
