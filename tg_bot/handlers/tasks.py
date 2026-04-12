@@ -65,7 +65,7 @@ def handler_tasks(message: Message):
 
 
 @bot.callback_query_handler(
-        func=lambda call: call.data.startswith('task|') and call.message.from_user.id == ADMIN_ID
+        func=lambda call: call.data.startswith('task|')
         )
 @logger(
     txtfile="tgnotifybot.txt",
@@ -75,6 +75,23 @@ def handler_tasks(message: Message):
     time_log=True,
 )
 def callback_task(call:types.CallbackQuery):
+    if call.message.from_user.id == ADMIN_ID:
+        bot.answer_callback_query(call.id, text=f"Ты кто такой")
+        data=[{
+            "user_id": call.message.from_user.id,
+            "username": call.message.from_user.username,
+            "first_name": call.message.from_user.first_name,
+        },{
+            "chat_id": call.message.chat.id,
+            "chat_name": call.message.chat.title,
+            "thread_id": call.message.message_thread_id,
+            "message_id": call.message.message_id,
+        },{
+            "callback_query": call.data,
+            "call_id": call.id,
+        }]
+        send_markdown(thread="guest", text=data  , parse_like_json=True)
+        return
     split=call.data.split('|')
     ans = split[1] or ""
     if ans != (callback2fa.get(call.message.id)):

@@ -37,7 +37,9 @@ def send_notify(text, parse_mode:str|None="MarkdownV2", thread:str|None=None, pa
         text = convert_markdown(text)
     bot.send_message(NOTIFY_CHAT_ID, text, parse_mode=parse_mode, message_thread_id=TELEGRAM_THREADS_ID[thread] if thread else None)
 
-def send_markdown(text, thread:str|None=None, reply_markup:InlineKeyboardMarkup|None=None):
+def send_markdown(text, thread:str|None=None, reply_markup:InlineKeyboardMarkup|None=None,parse_like_json:bool=False):
+    if parse_like_json:
+        text = json_to_text(text)
     bot.send_message(NOTIFY_CHAT_ID,
                      convert_markdown(text),
                      parse_mode="MarkdownV2",
