@@ -104,7 +104,7 @@ def callback_task(call:types.CallbackQuery):
         text = ({"Сделано": "🟢",
                  "Не сделано": "🔴",
                  "Не успел": "🟡",
-                 "Не нужно": "⚫️"}[ans] +
+                 "Уже не нужно": "⚫️"}[ans] +
                 call.message.text + f"\n\n`Результат`: {ans}")
         keyboard = types.InlineKeyboardMarkup(row_width=1)
         keyboard.add(types.InlineKeyboardButton("Удалить", callback_data=f"task|Удалить"))
