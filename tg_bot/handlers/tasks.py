@@ -89,7 +89,9 @@ def callback_task(call:types.CallbackQuery):
                  "Не успел": "🟡",
                  "Не нужно": "⚫️"}[ans] +
                 call.message.text + f"\n\n`Результат`: {ans}")
-        send_markdown(thread="task_result", text=text)
+        keyboard = types.InlineKeyboardMarkup(row_width=1)
+        keyboard.add(types.InlineKeyboardButton("Удалить", callback_data=f"task|Удалить"))
+        send_markdown(thread="task_result", text=text,reply_markup=keyboard)
 
 
 
