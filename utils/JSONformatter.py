@@ -10,7 +10,7 @@ ICONS = {
     'key': '🔑',
     'last': '└─',
     'not_last': '├─',
-    'not_linked': "│  "
+    'not_linked': "│   "
 }
 
 
@@ -78,7 +78,7 @@ def list_and_dict_formatter(
                     res=res+list_and_dict_formatter(
                         obj=value,
                         prefix=f"{child_prefix}{ICONS['last'] if is_last else ICONS['not_last']  }",
-                        child_prefix=f"{child_prefix}{"   " if is_last else "│  "}",
+                        child_prefix=f"{child_prefix}{"    " if is_last else ICONS["not_linked"]}",
                         key_name=key,
                         max_length=max_length,
                         max_recursion_depth=max_recursion_depth,
@@ -103,7 +103,7 @@ def list_and_dict_formatter(
                     res = res + list_and_dict_formatter(
                         obj=value,
                         prefix=f"{child_prefix}{ICONS['last'] if is_last else ICONS['not_last']}",
-                        child_prefix=f"{child_prefix}{"   " if is_last else "│  "}",
+                        child_prefix=f"{child_prefix}{"    " if is_last else ICONS["not_linked"]}",
                         key_name=None,
                         max_length=max_length,
                         max_recursion_depth=max_recursion_depth,
