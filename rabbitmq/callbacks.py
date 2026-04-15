@@ -1,6 +1,8 @@
 import json
 
+from config import TELEGRAM_THREADS_ID
 from tg_bot.senders import send_notify
+from utils.JSONformatter import json_format
 from utils.logger import logger
 from utils.mini_utils import get_geolocation
 
@@ -18,9 +20,7 @@ def tg_notify_callback(
         properties,
         body
 ):
-    text=""
     data:dict = json.loads(body.decode())
-    #type:str = data["type"]
-    send_notify(text=data,thread="request", parse_like_json=True)
-
+    thread:str|None =  data["type"] or None
+    send_notify(text=json_format(data),thread=thread)
     ch.basic_ack(delivery_tag=method.delivery_tag)
