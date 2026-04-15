@@ -10,7 +10,7 @@ ICONS = {
     'key': '🔑',
     'last': '└─',
     'not_last': '├─',
-    'not_linked': "│ "
+    'not_linked': "│  "
 }
 
 
@@ -73,14 +73,12 @@ def list_and_dict_formatter(
         last_index=len(obj)-1
         if isinstance(obj,dict):
             for ind, (key, value) in enumerate(obj.items()):
-                if value=="child2_with_very_long_name_that_exceeds_limit_and_should_wrap":
-                    pass
                 is_last=(ind == last_index)
                 if isinstance(value, dict) or isinstance(value, list):
                     res=res+list_and_dict_formatter(
                         obj=value,
                         prefix=f"{child_prefix}{ICONS['last'] if is_last else ICONS['not_last']  }",
-                        child_prefix=f"{child_prefix}{"  " if is_last else "│ "}",
+                        child_prefix=f"{child_prefix}{"   " if is_last else "│  "}",
                         key_name=key,
                         max_length=max_length,
                         max_recursion_depth=max_recursion_depth,
@@ -105,7 +103,7 @@ def list_and_dict_formatter(
                     res = res + list_and_dict_formatter(
                         obj=value,
                         prefix=f"{child_prefix}{ICONS['last'] if is_last else ICONS['not_last']}",
-                        child_prefix=f"{child_prefix}{"  " if is_last else "│ "}",
+                        child_prefix=f"{child_prefix}{"   " if is_last else "│  "}",
                         key_name=None,
                         max_length=max_length,
                         max_recursion_depth=max_recursion_depth,
