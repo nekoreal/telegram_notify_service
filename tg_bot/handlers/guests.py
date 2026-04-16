@@ -1,4 +1,4 @@
-
+from utils.JSONformatter import json_format
 from utils.logger import logger
 from tg_bot.bot import bot
 from telebot.types import Message
@@ -38,4 +38,4 @@ def handler_guests(message: Message):
         "content_type": message.content_type or "Empty",
     }
     ]
-    send_notify(text=data,thread="guest", parse_like_json=True)
+    send_notify(text=json_format(data),thread="guest")
