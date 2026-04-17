@@ -22,5 +22,10 @@ def tg_notify_callback(
 ):
     data:dict = json.loads(body.decode())
     thread:str|None =  data["type"] or None
+    try:
+        if thread=='request':
+            data['data'].append(get_geolocation(data['data'][1]['ip']))
+    except:
+        pass
     send_notify(text=json_format(data),thread=thread)
     ch.basic_ack(delivery_tag=method.delivery_tag)
