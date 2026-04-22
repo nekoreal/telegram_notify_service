@@ -124,7 +124,7 @@ def list_and_dict_formatter(
 
 def json_format(
         body:dict|list|None=None,
-        max_length:int=45,
+        max_length:int=30,
         max_recursion_depth:int=None,
 ):
     if body is None:
