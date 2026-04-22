@@ -21,6 +21,7 @@ def string_maxer(
         prefix:str="",
         indent:int=3,
 ):
+    s = s.replace("\n", " ")
     res=""
     prefix=F'{prefix}{ICONS["not_linked"] if not is_last else ""}'+(" "*indent)
     i=0
@@ -42,14 +43,11 @@ def value_formatter(
 ):
     skey = f'{ICONS["key"]}{key}: ' if key  else ''
     res=F'{prefix}{ICONS["last"] if is_last else ICONS["not_last"]}{skey}{ICONS[type(value)]}{value}'
-    if len(res)>max_length:
-        res = string_maxer(
-                        s=res,
-                        max_length=max_length,
-                        is_last=is_last,
-                        prefix=prefix, )
-    else:
-        res+="\n"
+    res = string_maxer(
+                    s=res,
+                    max_length=max_length,
+                    is_last=is_last,
+                    prefix=prefix, )
     return res
 
 
